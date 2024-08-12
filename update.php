@@ -1,4 +1,5 @@
-<?php 
+<?php
+session_start();
 include('connection.php');?>
 
 <!doctype html>
@@ -21,52 +22,97 @@ include('connection.php');?>
   <body>
        <?php
       if(isset($_GET['id'])){
-         
-        $up=$_GET['id'];
-        $up_row=mysqli_query($con,"select * from cetegory where id=$up");
+         $del=$_GET['id'];
+        $up_row=mysqli_query($con,"SELECT * FROM `cetegory` WHERE id=$del");
         $up_query=mysqli_fetch_array($up_row);
 
       }
         ?> 
  
     <div class="container">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="">name</label>
-              <input type="text" name="txtname" id="" value="<?php echo  $up_query[1]?>" class="form-control" placeholder="" aria-describedby="helpId" required>
+              <input type="text" name="txtname" id="" value="<?php echo  $up_query[1]?>" class="form-control" placeholder="" aria-describedby="helpId" >
           
               
             </div>
             <div class="form-group">
               <label for="">Description</label>
-              <input type="text" name="txtdescription" id="" value="<?php echo $up_query[2]?>"  class="form-control" placeholder="" aria-describedby="helpId" required>
+              <input type="text" name="txtdescription" id="" value="<?php echo $up_query[2]?>"  class="form-control" placeholder="" aria-describedby="helpId" >
               
+            </div>
+            <input type="text" class="form-control" value="<?php echo $up_query[3]?>" >
+            <div class="form-group">
+
+             <input type="file" name="cimage"  class="form-control">
             </div>
             <div class="form-group">
-              <label for=""></label>
-              <input type="text" name="txtpass" id="" value="<?php echo $up_query[3]?>"  class="form-control" placeholder="" aria-describedby="helpId" required>
-              
-            </div>
             <input type="submit" value="update" class="btn btn-info" name="btn_update">
+            </div>
         </form>
         </div>
   </body>
 </html>
 <?php
-if(isset($_POST['btn_update'])){
+
+ if(isset($_POST['btn_update'])){
   $name=$_POST['txtname'];
-  $email=$_POST['txtdescription'];
-  $pass=$_POST['txtpass'];
-  $update=mysqli_query($con,"UPDATE `users` SET `name`=' $name',`email`=' $email',`password`=' $pass' WHERE id=$up");
-  if($update){
-    echo"<script>alert('data updated')
-       location.assign('select.php')
-       </script>";
- 
+  $des=$_POST['txtdescription'];
+  $image=$_FILES['cimage']['name'];
+  $tamp_imagename=$_FILES['cimage']['tmp_name'];
+  $desination="img/".$image;
+  $extension=pathinfo($image , PATHINFO_EXTENSION);
+  if($extension=='png' || $extension=='jpeg' || $extension=='jpg'){
+      if(move_uploaded_file($tamp_imagename, $desination)){
+$query=mysqli_query($con,"UPDATE `cetegory` SET `name`=' $name',`descripton`=' $des',`image`='  $image' WHERE id=$del");           
+if($query){
+              
+                  echo"<script>alert('updated ')
+                  location.assign('View_cetegory.php');</script>";
+          
+          }
+         
+        
+      
+      else{
+          
+        echo"<script>alert('update error ')</script>";
+      }
+    }
   }
   else{
-    echo"<script>alert('data not updated')</script>";
+      echo"<script>alert('extension doesnot match ')</script>";
+
   }
 }
 
+// if(isset($_POST['btn_update'])){
+//   $name=$_POST['"txtname'];
+//   $des=$_POST['txtdescription'];
+//   $image=$_FILES['cimage']['name'];
+//   $tamp_imagename=$_FILES['cimage']['tmp_name'];  
+//   $desination="img/".$image;
+//   $extension=pathinfo($image , PATHINFO_EXTENSION);
+//   if($extension=='png' || $extension=='jpeg' || $extension=='jpg'){
+//       if(move_uploaded_file($tamp_imagename, $desination)){
+// $query=mysqli_query($con,"UPDATE `cetegory` SET `name`=' $name',`descripton`=' $des',`image`='$image' WHERE id=$del ");           
+// if($query){
+              
+//                   echo"<script>alert('cetegory updated ')</script>";
+          
+//           }
+         
+        
+//       }
+     
+//       else{
+//           echo"<script>alert('error update')</script>";
+//       }
+//   }
+//   else{
+//       echo"<script>alert('extension doesnot match ')</script>";
+
+//   }
+// }
 ?>
