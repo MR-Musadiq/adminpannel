@@ -2,114 +2,81 @@
 include('sidebar.php');
 include('connection.php')
 ?>
-
-<div class="container">
-             <form action="" method="post"  enctype="multipart/form-data">
-        <div class="for-group">
-        <label for="">P:name</label>
-        <input type="text" name="pname" class="form-control">
-        </div>
-        <div class="for-group">
-        <label for="">P:price</label>
-        <input type="text" name="price" class="form-control">
-        </div>
-        <div class="for-group">
-        <label for="">P:Quaninty</label>
-        <input type="text" name="quaninty" class="form-control">
-        </div>
-        <div class="for-group">
-        <label for="">P:image</label>
-        <input type="file" name="pimage" class="form-control">
-
-        </div>
-        <div class="form-group">
-         <select name="cat" id="">
-          <option value=""> select any category</option>
-            <?php
-       $data=mysqli_query($con,"SELECT * FROM `category`");
-       while($cat=mysqli_fetch_array($data)){?>
-         <option value="<?php echo $cat[0]?>"><?php echo $cat[1]?></option>
-         <?php
-       }
-
-            ?>
-           
-         </select>
-
-        </div>
-        <input type="submit" value="product" name="add_pro" class="btn btn-info">
-
-        
-
-                
-            
-
-             </form>
-             </div>
-             <?php
- if(isset($_POST['add_pro'])){
-    $name=$_POST['pname'];
-    $des=$_POST['price'];
-    $qua=$_POST['quaninty'];
-    $cat=$_POST['cat'];
-    $pro_image=$_FILES['pimage']['name'];
-    $tamp_imagename=$_FILES['pimage']['tmp_name'];
-    $desination="img/". $pro_image;
-    $extension=pathinfo( $pro_image , PATHINFO_EXTENSION);
-    if($extension=='png' || $extension=='jpeg' || $extension=='jpg'){
-        if(move_uploaded_file($tamp_imagename, $desination)){
-          $query= mysqli_query($con,"INSERT INTO `product`(`id`, `name`, `price`, `quantity`, `image`, `category_id`) VALUES ('  $name',' $des','  $qua','   $pro_image',' $cat')");
-            if($query){
-                
-                    echo"<script>alert('product addded ')</script>";
-            
-            }
-           
           
-        }
+                  <table class="table">
+                  <h1>view cetegory</h1>
+
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>Description</th>
+                <th>image</th>
+            </tr>
+        </thead>
+       <tbody>
+        <tr>
+       <?php
        
-        else{
-            echo"<script>alert('error ')</script>";
-        }
-    }
-    else{
-        echo"<script>alert('extension doesnot match ')</script>";
+    $query=mysqli_query($con,"SELECT * FROM `category`");
+       while ($row = mysqli_fetch_array( $query)){
 
-    }
- }
- 
- ?>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+       
+       ?>
+       <td scope="row"><?php echo $row[0]?></td>
+       <td ><?php echo $row[1]?></td>
+       <td ><?php echo $row[2]?></td>
+       <td><img src="./img/<?php echo $row[2]; ?>" alt="" height="100px"></td>
+       <td><a href="View_cetegory.php?id=<?php echo $row[0]?>" class="btn btn-danger"> delete</a>
+       <a href="update_cetegory.php?id=<?php echo $row[0]?>" class="btn btn-primary">update</a></td>  
+        </tr>
+        <?php
+       }
+        ?>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+       </tbody>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    </table>
+    <a href="add_cetegory.php"><button class="btn btn-primary">Add</button></a>
 
-</body>
+    
 
-</html>
 
-  <!-- Footer -->
- 
-            <!-- End of Footer -->
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-</body>
-
-</html>
-<!-- Footer -->
 <?php
-           include('footer.php');
-           ?>
+if(isset($_GET['id'])){
+    $del=$_GET['id'];
+    $del_row=mysqli_query($con,"DELETE FROM `category` WHERE  id=$del");
+    if($del_row){
+        echo"<script>
+        alert('rocord delete')
+        location.assign('View_cetegory.php');
+        </script>";
+
+    }
+}
+
+
+
+?>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+
+<?php
+include('footer.php');
+?>
+       
+  
+
+
+
+
+
