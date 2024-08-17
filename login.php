@@ -1,3 +1,6 @@
+<?php
+include('connection.php')
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,14 +44,14 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="post">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input type="email" name="useremail" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
+                                            <input type="password" name="userpassword" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Password">
                                         </div>
                                         <div class="form-group">
@@ -58,14 +61,15 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <input type="submit" name="login_account" class="btn btn-primary btn user  btn-block">
+                                        <!-- <a href="index.html" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </a> -->
                                         <hr>
-                                        <a href="index.html" class="btn btn-google btn-user btn-block">
+                                        <a href="index.php" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
                                         </a>
-                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                        <a href="index.php" class="btn btn-facebook btn-user btn-block">
                                             <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                                         </a>
                                     </form>
@@ -87,7 +91,22 @@
         </div>
 
     </div>
-
+<?php
+if(isset($_POST['login_account'])){
+    $email=$_POST['useremail'];
+    $password=$_POST['userpassword'];
+    $query=mysqli_query($con,"SELECT * FROM `register` WHERE email='$email' AND password='$password'");
+    $row=(mysqli_fetch_array($query));
+    if($row){
+        echo"<script>alert('login succefully')
+        location.assign('index.php')</script>";
+    }
+    else{
+        echo"<script>alert('login failed')
+        </script>";
+    }
+}
+?>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
