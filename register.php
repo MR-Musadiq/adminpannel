@@ -1,3 +1,6 @@
+<?php 
+include('connection.php')
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,24 +39,24 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
-                            <form class="user">
+                            <form class="user" method="post">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                        <input type="text" name="fname"   class="form-control form-control-user" id="exampleFirstName"
                                             placeholder="First Name">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                        <input type="text" name="lname" class="form-control form-control-user" id="exampleLastName"
                                             placeholder="Last Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="email" name="useremail" class="form-control form-control-user" id="exampleInputEmail"
                                         placeholder="Email Address">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input type="password" name="userpassword"  class="form-control form-control-user"
                                             id="exampleInputPassword" placeholder="Password">
                                     </div>
                                     <div class="col-sm-6">
@@ -61,9 +64,10 @@
                                             id="exampleRepeatPassword" placeholder="Repeat Password">
                                     </div>
                                 </div>
-                                <a href="login.php" class="btn btn-primary btn-user btn-block">
+                                  <input type="submit" name="register_account" class="btn btn-primary btn-user btn-block">
+                                <!-- <a href="login.php" class="btn btn-primary btn-user btn-block">
                                     Register Account
-                                </a>
+                                </a> -->
                                 <hr>
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google
@@ -86,6 +90,23 @@
         </div>
 
     </div>
+    <?php 
+   if(isset($_POST['register_account'])){
+   $fname=$_POST['fname'];
+   $lname=$_POST['lname'];
+   $email=$_POST['useremail'];
+   $password=$_POST['userpassword'];
+   $query=mysqli_query($con,"INSERT INTO `register`( `fname`, `lname`, `email`, `password`) 
+   VALUES ('$fname',' $lname','  $email','$password')");
+    if($query){
+        echo"<script>
+        alert('record inserted')
+        location.assign('login.php')
+        </script>";
+    }
+
+   }
+   ?>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
