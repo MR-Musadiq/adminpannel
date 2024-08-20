@@ -1,5 +1,10 @@
 <?php
+session_start();
 include('sidebar.php');
+if(isset($_SESSION['username'])==null){
+    echo"<script>location.assign('login.php')</script>";
+}
+else{
 ?>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -391,6 +396,8 @@ include('sidebar.php');
 </body>
 
 </html>
+<?php
+}?>
 <?php
 include('footer.php');
 ?>
