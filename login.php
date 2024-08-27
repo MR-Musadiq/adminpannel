@@ -2,7 +2,7 @@
 session_start();
 include('connection.php');
 if(isset($_SESSION['username'])!=null){
-    echo"<script>location.assign('login.php')</script>";
+    echo"<script>location.assign('index.php')</script>";
 }
 else{
 ?>
@@ -100,10 +100,11 @@ else{
 if(isset($_POST['login_account'])){
     $email=$_POST['useremail'];
     $password=$_POST['userpassword'];
-    $query=mysqli_query($con,"SELECT * FROM `register` WHERE email='$email' AND userpass='$password'");
+    $query = mysqli_query($con, "SELECT * FROM `register` WHERE email='$email' AND userpass='$password'");
     $row=(mysqli_fetch_array($query));
     if($row){
         $_SESSION['username']=$row[1];
+        $_SESSION['userrole']=$row[5];
         echo"<script>alert('login succefully')
         location.assign('index.php')</script>";
     }
